@@ -108,7 +108,7 @@ class SQLObject
       current = value.is_a?(String) ? "'#{value}'" : value
       attr_values << current
     end
-    
+
     [col_names, attr_values]
   end
 
@@ -145,6 +145,13 @@ class SQLObject
   end
 
   def save
+    self.class.validations.each do |validation|
+      self.class.send(validation)
+    end
+    self.class.validations_of_variables.each do |validation, variables|
+      vars = variables.map {|variable| send(variable)}
+      self.class.send(validation, vars)
+    end
     if id
       update
     else

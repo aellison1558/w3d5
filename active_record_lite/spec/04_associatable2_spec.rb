@@ -6,6 +6,7 @@ describe 'Associatable' do
 
   before(:all) do
     class Cat < SQLObject
+      validates [:name], [:presence]
       has_one_through :home, :human, :house
       belongs_to :human, foreign_key: :owner_id
 
